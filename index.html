@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enmadera — Escaleras y rampas para perros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="enmadera-logo.jpg">
+<style>
+  :root{
+    --ink:#24211C;
+    --ink-soft:#5B564C;
+    --paper:#EDE6D8;
+    --paper-deep:#E3DAC7;
+    --card:#FFFDF8;
+    --forest:#3F5A44;
+    --forest-dark:#2C4032;
+    --mustard:#C98A2D;
+    --mustard-soft:#EFD9AF;
+    --brick:#A6573E;
+    --line:rgba(36,33,28,0.14);
+    --line-soft:rgba(36,33,28,0.08);
+    --radius-s:6px;
+    --radius-m:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Public Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    line-height:1.08;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  img,svg{display:block;max-width:100%;}
+  button{font-family:inherit;cursor:pointer;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--forest);
+    outline-offset:2px;
+  }
+
+  /* ---------- header ---------- */
+  .site-header{
+    position:sticky;top:0;z-index:40;
+    background:rgba(237,230,216,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .site-header .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    height:74px;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:24px;font-weight:600;
+    display:flex;align-items:center;gap:10px;
+    text-decoration:none;
+  }
+  .logo svg{width:26px;height:26px;}
+  .logo-mark{
+    width:52px;height:52px;border-radius:50%;object-fit:cover;
+    flex-shrink:0;background:#fff;
+  }
+  footer .logo-mark{width:56px;height:56px;}
+  nav.main-nav{display:flex;gap:28px;}
+  nav.main-nav a{
+    text-decoration:none;font-size:15px;color:var(--ink-soft);
+    padding:6px 0;border-bottom:1px solid transparent;
+    transition:color .15s, border-color .15s;
+  }
+  nav.main-nav a:hover{color:var(--ink);border-color:var(--brick);}
+  .header-actions{display:flex;align-items:center;gap:14px;}
+  .cart-btn{
+    position:relative;background:var(--forest);color:#fff;border:none;
+    border-radius:999px;padding:10px 18px 10px 16px;font-size:14px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .cart-btn svg{width:18px;height:18px;}
+  .cart-badge{
+    background:var(--mustard);color:var(--ink);
+    font-size:12px;font-weight:700;border-radius:999px;
+    min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+    padding:0 5px;
+  }
+  .nav-toggle{display:none;background:none;border:none;padding:6px;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:64px 0 40px;}
+  .hero .wrap{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;}
+  .hero-copy p.kicker{
+    font-size:15px;color:var(--brick);margin:0 0 14px;font-weight:600;
+  }
+  .hero-copy h1{font-size:clamp(34px,4.4vw,54px);}
+  .hero-copy p.lede{
+    font-size:18px;color:var(--ink-soft);max-width:46ch;margin:20px 0 30px;
+  }
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:14px 24px;border-radius:999px;font-size:15px;font-weight:600;
+    border:1px solid transparent;text-decoration:none;
+  }
+  .btn-primary{background:var(--forest);color:#fff;}
+  .btn-primary:hover{background:var(--forest-dark);}
+  .btn-outline{background:transparent;color:var(--ink);border-color:var(--ink);}
+  .btn-outline:hover{background:var(--ink);color:var(--paper);}
+  .hero-stats{display:flex;gap:34px;margin-top:40px;}
+  .hero-stats div{border-left:2px solid var(--brick);padding-left:12px;}
+  .hero-stats strong{display:block;font-family:'Fraunces',serif;font-size:26px;}
+  .hero-stats span{font-size:13px;color:var(--ink-soft);}
+  .hero-art{position:relative;}
+
+  .hero-slider{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#000;}
+  .hero-slide-track{display:flex;transition:transform .35s ease;}
+  .hero-slide{min-width:100%;}
+  .hero-slide img, .hero-slide video{width:100%;display:block;}
+  .hero-slide-btn{
+    position:absolute;top:50%;transform:translateY(-50%);
+    background:rgba(255,255,255,0.88);border:none;width:36px;height:36px;border-radius:50%;
+    font-size:20px;line-height:1;cursor:pointer;color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .hero-slide-btn:hover{background:#fff;}
+  .hero-slide-btn.prev{left:10px;}
+  .hero-slide-btn.next{right:10px;}
+  .hero-slide-dots{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+    display:flex;gap:8px;
+  }
+  .hero-slide-dots .dot{
+    width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.55);
+    border:none;padding:0;cursor:pointer;
+  }
+  .hero-slide-dots .dot.is-active{background:#fff;}
+
+  /* ---------- trust bar ---------- */
+  .trust-bar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper-deep);}
+  .trust-bar .wrap{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:26px 28px;
+  }
+  .trust-item{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--ink-soft);}
+  .trust-item svg{width:22px;height:22px;flex-shrink:0;color:var(--forest);}
+  .trust-item strong{display:block;color:var(--ink);font-size:14.5px;margin-bottom:2px;}
+
+  /* ---------- section heads ---------- */
+  .section{padding:84px 0;}
+  .section-head{max-width:640px;margin-bottom:44px;}
+  .section-head h2{font-size:clamp(28px,3vw,38px);}
+  .section-head p{color:var(--ink-soft);font-size:16.5px;margin-top:14px;}
+
+  /* ---------- catalog ---------- */
+  .catalog-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+  .product-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
+    padding:30px;display:flex;flex-direction:column;gap:16px;
+  }
+  .product-card .tag{
+    align-self:flex-start;font-size:12.5px;background:var(--mustard-soft);color:var(--forest-dark);
+    padding:4px 12px;border-radius:999px;font-weight:600;
+  }
+  .product-card h3{font-size:24px;}
+  .product-card p{color:var(--ink-soft);font-size:15px;margin:0;}
+  .product-card .icon-frame{
+    height:220px;border-radius:var(--radius-s);background:var(--paper-deep);
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+  }
+  .product-card .icon-frame svg{width:110px;height:110px;color:var(--forest);}
+  .product-card .icon-frame img{width:100%;height:100%;object-fit:cover;}
+  .product-card .price-row{display:flex;align-items:baseline;justify-content:space-between;margin-top:auto;}
+  .product-card .price{font-family:'Fraunces',serif;font-size:22px;}
+  .product-card .price span{font-size:13px;color:var(--ink-soft);font-family:'Public Sans',sans-serif;}
+  .card-cta{
+    background:var(--ink);color:var(--paper);border:none;border-radius:999px;
+    padding:12px 20px;font-size:14.5px;font-weight:600;
+  }
+  .card-cta:hover{background:var(--forest-dark);}
+
+  /* ---------- tabs ---------- */
+  .tab-bar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:30px;}
+  .tab-btn{
+    background:none;border:none;padding:14px 4px;margin-right:26px;
+    font-size:16px;font-family:'Fraunces',serif;color:var(--ink-soft);
+    border-bottom:2px solid transparent;position:relative;top:1px;
+  }
+  .tab-btn.is-active{color:var(--ink);border-bottom-color:var(--brick);}
+  .tab-panel{display:none;}
+  .tab-panel.is-active{display:block;}
+
+  /* ---------- circular product picks ---------- */
+  .product-circles{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;padding:8px 0 4px;}
+  .product-circle{
+    background:none;border:none;padding:0;display:flex;flex-direction:column;
+    align-items:center;gap:14px;cursor:pointer;
+  }
+  .circle-img{
+    width:180px;height:180px;border-radius:50%;overflow:hidden;
+    border:4px solid var(--card);box-shadow:0 10px 26px rgba(36,33,28,0.2);
+    transition:transform .18s, box-shadow .18s;
+  }
+  .circle-img img{width:100%;height:100%;object-fit:cover;}
+  .product-circle:hover .circle-img{transform:scale(1.05);box-shadow:0 14px 32px rgba(36,33,28,0.26);}
+  .circle-label{font-family:'Fraunces',serif;font-size:19px;color:var(--ink);}
+  @media (max-width:600px){
+    .circle-img{width:140px;height:140px;}
+    .product-circles{gap:28px;}
+  }
+
+  .product-info-modal{max-width:480px;}
+  .product-modal-body{padding:18px 20px 22px;flex:1 1 auto;overflow-y:auto;min-height:0;}
+  .product-modal-img{
+    width:100%;height:200px;border-radius:var(--radius-s);overflow:hidden;margin-bottom:14px;
+  }
+  .product-modal-img img{width:100%;height:100%;object-fit:cover;}
+  .product-modal-body .tag{
+    display:inline-block;font-size:12.5px;background:var(--mustard-soft);color:var(--forest-dark);
+    padding:4px 12px;border-radius:999px;font-weight:600;margin-bottom:12px;
+  }
+  .product-modal-body p{color:var(--ink-soft);font-size:15px;margin:0 0 18px;}
+
+  .product-info-modal.is-detail{max-width:620px;}
+  .product-modal-detail{padding:16px 20px 22px;flex:1 1 auto;overflow-y:auto;min-height:0;}
+  .modal-back-btn{
+    background:none;border:none;color:var(--ink-soft);font-size:14px;
+    margin-bottom:18px;padding:0;cursor:pointer;
+  }
+  .modal-back-btn:hover{color:var(--ink);}
+  .detail-block{margin-bottom:34px;}
+  .detail-block h4{font-family:'Fraunces',serif;font-size:20px;margin-bottom:6px;}
+  .detail-sub{color:var(--ink-soft);font-size:14.5px;margin:0 0 18px;}
+  .product-modal-detail .how-grid{grid-template-columns:1fr;gap:16px;}
+  .product-modal-detail .config-layout{grid-template-columns:1fr;gap:24px;}
+  .product-modal-detail .config-preview{position:static;}
+
+  /* ---------- how it works ---------- */
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;}
+  .how-step{border-top:2px solid var(--brick);padding-top:18px;}
+  .how-step .num{font-family:'Fraunces',serif;font-size:34px;color:var(--brick);}
+  .how-step h3{font-size:19px;margin:10px 0 8px;}
+  .how-step p{color:var(--ink-soft);font-size:15px;margin:0;}
+
+  /* ---------- configurator ---------- */
+  .config-layout{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:flex-start;}
+  .config-form{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);padding:30px;}
+  .field-group{margin-bottom:24px;}
+  .field-group > label, .field-legend{
+    display:block;font-size:14px;font-weight:600;margin-bottom:9px;
+  }
+  .field-hint{font-size:13px;color:var(--ink-soft);margin-top:6px;}
+  input[type=text], input[type=number], select, textarea{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:var(--radius-s);
+    background:#fff;font-size:15px;color:var(--ink);font-family:inherit;
+  }
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+  .choice-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .choice-card{
+    border:1px solid var(--line);border-radius:var(--radius-s);padding:14px;
+    cursor:pointer;position:relative;background:#fff;
+  }
+  .choice-card input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;}
+  .choice-card strong{display:block;font-size:15px;margin-bottom:3px;}
+  .choice-card span{font-size:13px;color:var(--ink-soft);}
+  .choice-card.is-active{border-color:var(--forest);box-shadow:0 0 0 1px var(--forest);background:#F4F8F4;}
+
+  .fabric-grid{display:flex;flex-wrap:wrap;gap:10px;}
+  .fabric-swatch{
+    width:44px;text-align:center;background:none;border:none;padding:0;
+  }
+  .fabric-swatch .chip{
+    display:block;width:44px;height:44px;border-radius:7px;border:1px solid rgba(0,0,0,0.15);
+    margin-bottom:5px;position:relative;
+  }
+  .fabric-swatch.is-active .chip{outline:2px solid var(--forest);outline-offset:2px;}
+  .fabric-swatch .chip svg{position:absolute;top:4px;right:4px;width:11px;height:11px;color:#fff;filter:drop-shadow(0 0 1px rgba(0,0,0,.6));}
+  .fabric-swatch small{font-size:11px;color:var(--ink-soft);}
+
+  .custom-dims{display:none;margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);}
+  .custom-dims.is-visible{display:block;}
+
+  .qty-row{display:flex;align-items:center;gap:14px;}
+  .qty-control{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px;overflow:hidden;}
+  .qty-control button{background:var(--paper-deep);border:none;width:36px;height:36px;font-size:17px;}
+  .qty-control span{width:36px;text-align:center;font-weight:600;}
+
+  .config-preview{position:sticky;top:100px;}
+  .standalone-preview{position:static;max-width:420px;margin:0 auto;}
+  .preview-panel{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius-m);
+    padding:26px;
+  }
+  .preview-canvas{
+    background:var(--paper-deep);border-radius:var(--radius-s);
+    height:280px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+    overflow:hidden;
+  }
+  .preview-canvas img{width:100%;height:100%;object-fit:cover;}
+  .preview-summary{font-size:14.5px;}
+  .preview-summary dl{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:0 0 18px;}
+  .preview-summary dt{color:var(--ink-soft);}
+  .preview-summary dd{margin:0;font-weight:600;text-align:right;}
+  .preview-total{
+    display:flex;align-items:baseline;justify-content:space-between;
+    border-top:1px solid var(--line);padding-top:16px;margin-bottom:18px;
+  }
+  .preview-total strong{font-family:'Fraunces',serif;font-size:28px;}
+  .preview-total span{font-size:13px;color:var(--ink-soft);}
+  .add-cart-btn{
+    width:100%;background:var(--brick);color:#fff;border:none;border-radius:999px;
+    padding:15px;font-size:15.5px;font-weight:700;
+  }
+  .add-cart-btn:hover{background:#8C4530;}
+  .view-design-btn{
+    width:100%;background:transparent;color:var(--ink);border:1px solid var(--ink);
+    border-radius:999px;padding:14px;font-size:15px;font-weight:600;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .view-design-btn:hover{background:var(--ink);color:var(--paper);}
+  .view-design-btn svg{width:18px;height:18px;}
+  .form-msg{
+    font-size:13.5px;color:var(--brick);margin-top:10px;min-height:18px;
+  }
+
+  /* ---------- materials ---------- */
+  .materials .wrap{display:grid;grid-template-columns:0.9fr 1.1fr;gap:50px;align-items:center;}
+  .materials h2{font-size:clamp(26px,3vw,34px);margin-bottom:16px;}
+  .materials p{color:var(--ink-soft);font-size:16px;margin-bottom:10px;}
+  .swatch-showcase{display:flex;flex-wrap:wrap;gap:14px;}
+  .swatch-showcase .tile{
+    width:92px;height:92px;border-radius:var(--radius-s);display:flex;align-items:flex-end;padding:8px;
+    color:#fff;font-size:12px;font-weight:600;
+  }
+
+  /* ---------- footer ---------- */
+  footer{background:var(--ink);color:var(--paper);padding:50px 0 30px;}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+  footer .logo{color:var(--paper);}
+  footer .foot-cols{display:flex;gap:60px;flex-wrap:wrap;}
+  footer .foot-cols h4{font-size:13px;color:var(--mustard-soft);margin:0 0 10px;font-weight:600;}
+  footer .foot-cols a{display:block;font-size:14px;color:#D8D3C6;text-decoration:none;margin-bottom:8px;}
+  .foot-bottom{
+    max-width:1180px;margin:34px auto 0;padding:20px 28px 0;border-top:1px solid rgba(255,255,255,0.12);
+    font-size:13px;color:#B8B3A6;
+  }
+
+  /* ---------- cart drawer ---------- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(36,33,28,0.45);opacity:0;pointer-events:none;
+    transition:opacity .25s;z-index:60;
+  }
+  .overlay.is-open{opacity:1;pointer-events:auto;}
+  .cart-drawer{
+    position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;
+    background:var(--paper);z-index:61;transform:translateX(100%);
+    transition:transform .28s ease;display:flex;flex-direction:column;
+    box-shadow:-8px 0 30px rgba(0,0,0,0.18);
+  }
+  .cart-drawer.is-open{transform:translateX(0);}
+  .cart-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 24px;border-bottom:1px solid var(--line);
+  }
+  .cart-head h3{font-size:20px;}
+  .cart-close{background:none;border:none;font-size:22px;line-height:1;padding:4px;color:var(--ink-soft);}
+  .cart-items{flex:1;overflow-y:auto;padding:18px 24px;}
+  .cart-empty{color:var(--ink-soft);font-size:14.5px;text-align:center;padding:60px 10px;}
+  .cart-item{display:flex;gap:12px;padding:16px 0;border-bottom:1px solid var(--line-soft);}
+  .cart-item .swatch{width:52px;height:52px;border-radius:8px;flex-shrink:0;position:relative;}
+  .cart-item .info{flex:1;}
+  .cart-item .info h5{font-size:15px;margin:0 0 4px;font-family:'Fraunces',serif;font-weight:500;}
+  .cart-item .info p{margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+  .cart-item .item-actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+  .cart-item .remove-btn{background:none;border:none;font-size:12.5px;color:var(--brick);text-decoration:underline;padding:0;}
+  .cart-item .item-price{font-weight:700;font-size:14px;white-space:nowrap;}
+  .cart-footer{border-top:1px solid var(--line);padding:20px 24px 26px;}
+  .cart-subtotal{display:flex;justify-content:space-between;font-size:15px;margin-bottom:14px;}
+  .cart-subtotal strong{font-family:'Fraunces',serif;font-size:22px;}
+  .checkout-btn{
+    width:100%;background:var(--forest);color:#fff;border:none;border-radius:999px;
+    padding:15px;font-weight:700;font-size:15.5px;
+  }
+  .checkout-btn:hover{background:var(--forest-dark);}
+  .cart-note{font-size:12px;color:var(--ink-soft);margin-top:10px;text-align:center;}
+
+  /* ---------- floating contact buttons ---------- */
+  .float-contact{
+    position:fixed;right:22px;bottom:22px;z-index:55;
+    display:flex;flex-direction:column;gap:12px;align-items:flex-end;
+  }
+  .float-btn{
+    width:54px;height:54px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;text-decoration:none;box-shadow:0 6px 18px rgba(36,33,28,0.28);
+    transition:transform .15s;
+  }
+  .float-btn:hover{transform:scale(1.07);}
+  .float-btn svg{width:26px;height:26px;}
+  .float-btn.whatsapp{background:#25D366;}
+  .float-btn.instagram{background:radial-gradient(circle at 30% 110%, #FDC468 0%, #DF4996 45%, #833AB4 75%, #5B51D8 100%);}
+  .float-btn.email{background:var(--ink);}
+  @media (max-width:600px){
+    .float-contact{right:14px;bottom:14px;gap:10px;}
+    .float-btn{width:48px;height:48px;}
+    .float-btn svg{width:22px;height:22px;}
+  }
+
+  /* ---------- 3D design modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(36,33,28,0.55);opacity:0;pointer-events:none;
+    transition:opacity .2s;z-index:70;display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.is-open{opacity:1;pointer-events:auto;}
+  .design-modal{
+    background:var(--card);border-radius:var(--radius-m);width:100%;max-width:600px;
+    max-height:85vh;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);transform:translateY(16px);transition:transform .2s;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .modal-overlay.is-open .design-modal{transform:translateY(0);}
+  .modal-head{
+    display:flex;align-items:center;justify-content:space-between;padding:16px 20px;
+    border-bottom:1px solid var(--line);flex-shrink:0;
+  }
+  .modal-head h3{font-size:18px;}
+  .modal-close{background:none;border:none;font-size:22px;color:var(--ink-soft);padding:4px;line-height:1;}
+  .modal-3d-canvas{
+    width:100%;flex:1 1 auto;min-height:220px;max-height:55vh;
+    background:linear-gradient(180deg,#EDE6D8 0%,#DDD2BA 100%);touch-action:none;
+  }
+  .modal-foot{padding:12px 20px 16px;font-size:13px;color:var(--ink-soft);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;flex-shrink:0;}
+  @media (max-width:600px){ .modal-3d-canvas{min-height:200px;max-height:45vh;} }
+
+  /* ---------- billing modal ---------- */
+  .billing-modal{max-width:460px;}
+  .billing-body{padding:18px 20px 22px;flex:1 1 auto;overflow-y:auto;min-height:0;}
+  .billing-divider{
+    font-size:13px;font-weight:600;color:var(--ink-soft);
+    margin:22px 0 14px;padding-top:16px;border-top:1px dashed var(--line);
+  }
+  #dogPhotoPreview img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--line);margin-top:8px;}
+  .delivery-note{
+    font-size:13px;font-weight:600;color:var(--forest-dark);background:var(--mustard-soft);
+    padding:12px 14px;border-radius:8px;margin:14px 0 0;text-align:center;
+  }
+
+  @media (max-width:900px){
+    nav.main-nav{display:none;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-art{order:-1;}
+    .trust-bar .wrap{grid-template-columns:1fr 1fr;}
+    .catalog-grid{grid-template-columns:1fr;}
+    .how-grid{grid-template-columns:1fr;}
+    .config-layout{grid-template-columns:1fr;}
+    .config-preview{position:static;}
+    .materials .wrap{grid-template-columns:1fr;}
+    .row-2, .row-3{grid-template-columns:1fr;}
+    .choice-cards{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="#top" class="logo">
+      <img src="enmadera-logo.jpg" alt="Enmadera" class="logo-mark">
+      Enmadera
+    </a>
+    <nav class="main-nav">
+      <a href="#productos">Productos</a>
+      <a href="#materiales">Telas</a>
+      <a href="#resumen-diseno">Tu diseño</a>
+    </nav>
+    <div class="header-actions">
+      <button class="cart-btn" id="openCart" aria-label="Abrir carrito">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M3 3h2l2.4 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 8H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="21" r="1" fill="currentColor"/><circle cx="18" cy="21" r="1" fill="currentColor"/></svg>
+        Carrito
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="kicker">Hecho a la medida de tu perro</p>
+        <h1>Que suban a la cama sin saltar, sin dolor y sin ayuda.</h1>
+        <p class="lede">Escaleras y rampas de madera forradas en tela, construidas según la raza, el peso y la altura de tu perro. Tú eliges el color de la tela y las medidas exactas.</p>
+        <div class="hero-stats">
+          <div><strong>+30</strong><span>razas contempladas</span></div>
+          <div><strong>3</strong><span>colores de tela</span></div>
+          <div><strong>100%</strong><span>medidas a pedido</span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="hero-slider" id="heroSlider">
+          <div class="hero-slide-track" id="heroSlideTrack">
+            <div class="hero-slide">
+              <img src="hero-infografia.jpg" alt="Yorkshire terrier bajando por una rampa Enmadera hacia el piso">
+            </div>
+            <div class="hero-slide">
+              <video id="heroVideo" controls playsinline preload="metadata" poster="hero-infografia.jpg">
+                <source src="hero-video.mp4" type="video/mp4">
+                Tu navegador no puede reproducir este video.
+              </video>
+            </div>
+            <div class="hero-slide">
+              <video id="heroVideo2" controls playsinline preload="metadata">
+                <source src="hero-video-2.mp4" type="video/mp4">
+                Tu navegador no puede reproducir este video.
+              </video>
+            </div>
+          </div>
+          <button type="button" class="hero-slide-btn prev" id="heroPrev" aria-label="Anterior">‹</button>
+          <button type="button" class="hero-slide-btn next" id="heroNext" aria-label="Siguiente">›</button>
+          <div class="hero-slide-dots" id="heroDots">
+            <button type="button" class="dot is-active" data-slide="0" aria-label="Ver imagen"></button>
+            <button type="button" class="dot" data-slide="1" aria-label="Ver video 1"></button>
+            <button type="button" class="dot" data-slide="2" aria-label="Ver video 2"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trust-bar">
+    <div class="wrap">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.4 8.4-8 9-4.6-.6-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <div><strong>Estructura reforzada</strong>madera resistente al peso de cada raza</div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <div><strong>Antideslizante</strong>tela con base antiderrapante en cada peldaño</div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.8"/></svg>
+        <div><strong>Medidas a pedido</strong>estándar o personalizadas, sin costo extra de espera</div>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-9.5-8.8C.6 8.4 3 5 6.3 5c2 0 3.4 1.1 4.2 2.2C11.3 6.1 12.7 5 14.7 5 18 5 20.4 8.4 21.5 12.2 19 16.6 12 21 12 21z" stroke="currentColor" stroke-width="1.8"/></svg>
+        <div><strong>Pensado para el confort</strong>menos impacto en articulaciones y columna</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="materiales" style="padding-bottom:24px;">
+    <div class="wrap">
+      <div>
+        <h2>Una tela pensada para patas y garras</h2>
+        <p>Todas las escaleras y rampas usan la misma tela técnica: resistente al desgaste de las uñas, fácil de limpiar y con base antideslizante cosida a cada peldaño.</p>
+        <p>Elige el color que combine con tu casa entre tres opciones disponibles para cualquier modelo.</p>
+      </div>
+      <div class="swatch-showcase" id="swatchShowcase"></div>
+    </div>
+  </section>
+
+  <section class="section" id="productos" style="padding-top:24px;">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Dos formas de llegar a la cama</h2>
+        <p>La escalera ocupa menos espacio en el piso; la rampa es mejor para perros pequeños, cachorros o con articulaciones delicadas. Ambas se construyen a la medida de tu mueble.</p>
+      </div>
+
+      <div class="product-circles">
+        <button type="button" class="product-circle" data-product-circle="escalera">
+          <span class="circle-img"><img src="escalera-foto.jpg" alt="Escalera Enmadera"></span>
+          <span class="circle-label">Escalera</span>
+        </button>
+        <button type="button" class="product-circle" data-product-circle="rampa">
+          <span class="circle-img"><img src="rampa-foto.jpg" alt="Rampa Enmadera" style="object-position:top;"></span>
+          <span class="circle-label">Rampa</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="resumen-diseno" style="background:var(--paper-deep);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Tu diseño y compra</h2>
+        <p>Personaliza tu escalera o rampa desde las tarjetas de arriba. Aquí verás la vista previa, el precio actualizado, el visor 3D y el botón para agregar al carrito.</p>
+      </div>
+
+      <div class="config-preview standalone-preview">
+        <div class="preview-panel">
+          <div class="preview-canvas" id="previewCanvas"></div>
+          <div class="preview-summary">
+            <dl>
+              <dt>Producto</dt><dd id="sumProducto">Escalera</dd>
+              <dt>Perro</dt><dd id="sumPerro">—</dd>
+              <dt>Medidas</dt><dd id="sumMedidas">Estándar</dd>
+              <dt>Tela</dt><dd id="sumTela">Negro</dd>
+              <dt>Cantidad</dt><dd id="sumCantidad">1</dd>
+            </dl>
+          </div>
+          <div class="preview-total">
+            <span>Precio total</span>
+            <strong id="previewPrice">$245.000</strong>
+          </div>
+          <button type="button" class="view-design-btn" id="viewDesignBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5"/><path d="M12 12v9"/></svg>
+            Ver diseño en 3D
+          </button>
+          <button class="add-cart-btn" id="addToCartBtn">Agregar al carrito</button>
+          <p class="form-msg" id="formMsg"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="#top" class="logo">
+      <img src="enmadera-logo.jpg" alt="Enmadera" class="logo-mark">
+      Enmadera
+    </a>
+    <div class="foot-cols">
+      <div>
+        <h4>Productos</h4>
+        <a href="#productos">Escaleras</a>
+        <a href="#productos">Rampas</a>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <a href="#productos">Cómo elegir la medida</a>
+        <a href="#materiales">Telas y cuidados</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom wrap">© 2026 Enmadera. Escaleras y rampas hechas a la medida de tu perro.</div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="cart-drawer" id="cartDrawer" aria-label="Carrito de compra">
+  <div class="cart-head">
+    <h3>Tu carrito</h3>
+    <button class="cart-close" id="closeCart" aria-label="Cerrar carrito">×</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <p class="cart-empty">Tu carrito está vacío. Diseña un producto para empezar.</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div>
+    <button class="checkout-btn" id="checkoutBtn">Finalizar compra</button>
+    <p class="cart-note">Al finalizar serás redirigido a la página de pago segura con PSE.</p>
+  </div>
+</aside>
+
+<div class="float-contact">
+  <a class="float-btn whatsapp" href="https://wa.me/573204506790" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp" title="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.77.46 3.45 1.28 4.94L2 22l5.28-1.38a9.87 9.87 0 0 0 4.76 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm5.8 14.05c-.24.68-1.4 1.3-1.94 1.38-.5.08-1.12.11-1.8-.11-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.16-4.94-4.36-.14-.2-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.2 0 .39 0 .56.01.18.01.42-.07.65.5.24.58.82 2 .89 2.14.07.15.11.32.02.51-.09.2-.14.32-.27.49-.14.17-.29.38-.41.51-.14.15-.28.3-.12.59.16.29.72 1.19 1.55 1.93 1.06.95 1.96 1.24 2.25 1.38.29.14.46.12.63-.07.17-.2.72-.84.92-1.13.2-.29.4-.24.66-.14.27.1 1.7.8 1.99.95.29.14.48.21.55.33.07.12.07.68-.17 1.36z"/></svg>
+  </a>
+  <a class="float-btn instagram" href="https://instagram.com/enmaderataller" target="_blank" rel="noopener" aria-label="Síguenos en Instagram" title="Instagram">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a class="float-btn email" href="mailto:enmaderataller@gmail.com" aria-label="Escríbenos un correo" title="Correo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+  </a>
+</div>
+
+<div class="modal-overlay" id="productModalOverlay">
+  <div class="design-modal product-info-modal" id="productModalBox" role="dialog" aria-label="Detalle del producto">
+    <div class="modal-head">
+      <h3 id="productModalTitle">Escalera Enmadera</h3>
+      <button class="modal-close" id="closeProductModal" aria-label="Cerrar">×</button>
+    </div>
+
+    <div class="product-modal-body" id="productSummaryView">
+      <div class="product-modal-img" id="productModalImgWrap"><img id="productModalImg" src="" alt=""></div>
+      <span class="tag" id="productModalTag"></span>
+      <p id="productModalDesc"></p>
+      <div class="price-row">
+        <div class="price" id="productModalPrice"></div>
+        <button class="card-cta" id="productModalCta">Personalizar</button>
+      </div>
+      <button type="button" class="view-design-btn" id="productModalStandardBtn" style="margin-top:14px;">
+        Quiero la medida estándar, sin diseñar
+      </button>
+    </div>
+
+    <div class="product-modal-detail" id="productDetailView" style="display:none;">
+      <button type="button" class="modal-back-btn" id="backToSummary">‹ Volver</button>
+
+      <div class="detail-block">
+        <h4>Cómo funciona el diseño a la medida</h4>
+        <p class="detail-sub">Tres datos bastan para que la estructura y las medidas se ajusten a tu perro.</p>
+        <div class="how-grid">
+          <div class="how-step">
+            <div class="num">1</div>
+            <h3>Cuéntanos de tu perro</h3>
+            <p>Raza, peso y la altura del mueble al que necesita subir. Con eso calculamos el número de escalones o el largo de la rampa.</p>
+          </div>
+          <div class="how-step">
+            <div class="num">2</div>
+            <h3>Elige medidas y tela</h3>
+            <p>Usa la medida estándar recomendada o ingresa tus propias medidas. Después elige el color de tela entre las opciones disponibles.</p>
+          </div>
+          <div class="how-step">
+            <div class="num">3</div>
+            <h3>Revisa tu diseño y compra</h3>
+            <p>La vista previa se actualiza con tus datos. Agrega al carrito y ajusta cantidades antes de finalizar la compra.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-block">
+        <h4 id="detailConfigTitle">Diseña el producto de tu perro</h4>
+        <p class="detail-sub">Completa los datos y observa cómo cambia el diseño y el precio en tiempo real.</p>
+
+        <div class="config-layout">
+          <div class="tab-bar" role="tablist" aria-label="Tipo de producto a diseñar" style="margin-bottom:26px;display:none;">
+            <button type="button" class="tab-btn is-active" id="cfgTabEscalera" role="tab" aria-selected="true" data-config-tab="escalera">Escalera</button>
+            <button type="button" class="tab-btn" id="cfgTabRampa" role="tab" aria-selected="false" data-config-tab="rampa">Rampa</button>
+          </div>
+          <input type="radio" name="tipo" value="escalera" id="tipoEscalera" checked style="display:none;">
+          <input type="radio" name="tipo" value="rampa" id="tipoRampa" style="display:none;">
+
+          <form class="config-form" id="configForm">
+
+            <div class="field-group">
+              <label for="breed">Raza</label>
+              <select id="breed">
+                <option value="">Selecciona una raza</option>
+                <option>Chihuahua</option>
+                <option>Salchicha (Dachshund)</option>
+                <option>French Poodle</option>
+                <option>Schnauzer</option>
+                <option>Pug</option>
+                <option>Shih Tzu</option>
+                <option>Bulldog Francés</option>
+                <option>Beagle</option>
+                <option>Cocker Spaniel</option>
+                <option>Labrador Retriever</option>
+                <option>Golden Retriever</option>
+                <option>Pastor Alemán</option>
+                <option>Bulldog Inglés</option>
+                <option>Boxer</option>
+                <option value="otra">Otra raza / mestizo</option>
+              </select>
+              <input type="text" id="breedOther" placeholder="Escribe la raza" style="display:none;margin-top:10px;">
+            </div>
+
+            <div class="row-2 field-group">
+              <div>
+                <label for="weight">Peso de tu perro (kg)</label>
+                <input type="number" id="weight" min="1" max="90" placeholder="Ej. 8">
+              </div>
+              <div>
+                <label for="petHeight">Altura de la cama o sofá (cm)</label>
+                <input type="number" id="petHeight" min="20" max="120" placeholder="Ej. 55">
+              </div>
+            </div>
+            <p class="field-hint" id="sizeRecommendation">Ingresa el peso y la altura para ver la recomendación de tamaño.</p>
+
+            <div class="field-group">
+              <span class="field-legend">Medidas</span>
+              <div class="choice-cards">
+                <label class="choice-card is-active" id="cardEstandar">
+                  <input type="radio" name="medida" value="estandar" checked>
+                  <strong>Estándar recomendada</strong>
+                  <span>Calculada según altura</span>
+                </label>
+                <label class="choice-card" id="cardPersonalizada">
+                  <input type="radio" name="medida" value="personalizada">
+                  <strong>Personalizada</strong>
+                  <span>Tú ingresas las medidas (+$50.000)</span>
+                </label>
+              </div>
+              <div class="custom-dims" id="customDims">
+                <div class="row-3">
+                  <div>
+                    <label for="dimLargo">Largo (cm)</label>
+                    <input type="number" id="dimLargo" min="20" max="150">
+                  </div>
+                  <div>
+                    <label for="dimAncho">Ancho (cm)</label>
+                    <input type="number" id="dimAncho" min="15" max="80">
+                  </div>
+                  <div>
+                    <label for="dimAlto">Alto (cm)</label>
+                    <input type="number" id="dimAlto" min="20" max="120">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <span class="field-legend">Color de la tela</span>
+              <div class="fabric-grid" id="fabricGrid"></div>
+            </div>
+
+            <div class="field-group">
+              <label>Cantidad</label>
+              <div class="qty-row">
+                <div class="qty-control">
+                  <button type="button" id="qtyMinus" aria-label="Restar">−</button>
+                  <span id="qtyValue">1</span>
+                  <button type="button" id="qtyPlus" aria-label="Sumar">+</button>
+                </div>
+              </div>
+            </div>
+
+          </form>
+
+          <button type="button" class="add-cart-btn" id="goToPreviewBtn">Ver mi vista previa y comprar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="designModalOverlay">
+  <div class="design-modal" role="dialog" aria-label="Vista previa en 3D de tu diseño">
+    <div class="modal-head">
+      <h3>Tu diseño en 3D</h3>
+      <button class="modal-close" id="closeDesignModal" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-3d-canvas" id="designCanvas3D"></div>
+    <div class="modal-foot">
+      <span id="designModalSummary">Escalera · tela Negro</span>
+      <span id="designModalHint">Arrastra para girar</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="billingModalOverlay">
+  <div class="design-modal billing-modal" role="dialog" aria-label="Facturación y entrega">
+    <div class="modal-head">
+      <h3>Facturación y entrega</h3>
+      <button class="modal-close" id="closeBillingModal" aria-label="Cerrar">×</button>
+    </div>
+    <div class="billing-body">
+      <form id="billingForm">
+
+        <div class="field-group">
+          <label for="billingDogName">Nombre de tu perro</label>
+          <input type="text" id="billingDogName" placeholder="Ej. Toby" required>
+        </div>
+
+        <div class="field-group">
+          <label for="billingDogPhoto">Foto de tu perro (opcional)</label>
+          <input type="file" id="billingDogPhoto" accept="image/*">
+          <div id="dogPhotoPreview"></div>
+        </div>
+
+        <div class="billing-divider">Datos de facturación y entrega</div>
+
+        <div class="field-group">
+          <label for="billingName">Nombre completo</label>
+          <input type="text" id="billingName" placeholder="Nombre y apellido" required>
+        </div>
+
+        <div class="row-2 field-group">
+          <div>
+            <label for="billingEmail">Correo electrónico</label>
+            <input type="email" id="billingEmail" placeholder="tucorreo@ejemplo.com" required>
+          </div>
+          <div>
+            <label for="billingPhone">Teléfono</label>
+            <input type="text" id="billingPhone" placeholder="Ej. 3001234567" required>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="billingAddress">Dirección de envío</label>
+          <textarea id="billingAddress" rows="2" placeholder="Calle, número, barrio, ciudad" required></textarea>
+        </div>
+
+        <p class="form-msg" id="billingFormMsg"></p>
+        <button type="submit" class="add-cart-btn" id="billingSubmitBtn">Continuar al pago</button>
+        <p class="delivery-note">Importante: los productos se entregan en un plazo de 5 días hábiles.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+(function(){
+  // Reemplaza este link por el que te entregue tu pasarela de pago (Wompi, ePayco, PayU, etc.)
+  // una vez tengas cuenta activa con soporte para PSE.
+  const PSE_PAYMENT_URL = 'https://checkout.wompi.co/l/REEMPLAZAR_CON_TU_LINK';
+
+  // ---------- hero image/video slider ----------
+  (function initHeroSlider(){
+    const track = document.getElementById('heroSlideTrack');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    const dots = Array.from(document.querySelectorAll('#heroDots .dot'));
+    const slides = Array.from(track.children);
+    const slideCount = dots.length;
+    let current = 0;
+    let startX = null;
+
+    function goTo(index){
+      current = Math.max(0, Math.min(slideCount - 1, index));
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+      slides.forEach((slide, i) => {
+        if (i === current) return;
+        const video = slide.querySelector('video');
+        if (video && !video.paused) video.pause();
+      });
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+
+    track.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, {passive:true});
+    track.addEventListener('touchend', (e) => {
+      if (startX === null) return;
+      const diff = e.changedTouches[0].clientX - startX;
+      if (Math.abs(diff) > 40) goTo(diff < 0 ? current + 1 : current - 1);
+      startX = null;
+    }, {passive:true});
+  })();
+
+  const fabrics = [
+    {name:'Negro', hex:'#1F1D1B'},
+    {name:'Café', hex:'#6F4A2E'},
+    {name:'Gris', hex:'#6E6A63'}
+  ];
+
+  const state = {
+    tipo:'escalera',
+    breed:'',
+    weight:null,
+    petHeight:null,
+    medida:'estandar',
+    dims:{largo:null, ancho:null, alto:null},
+    fabricIndex:0,
+    qty:1
+  };
+
+  let cart = [];
+  let cartIdCounter = 1;
+
+  // ---------- build fabric swatches ----------
+  const fabricGrid = document.getElementById('fabricGrid');
+  fabrics.forEach((f, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'fabric-swatch' + (i === 0 ? ' is-active' : '');
+    btn.dataset.index = i;
+    btn.innerHTML = `<span class="chip" style="background:${f.hex}">${i===0 ? '<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}</span><small>${f.name}</small>`;
+    btn.addEventListener('click', () => {
+      state.fabricIndex = i;
+      document.querySelectorAll('.fabric-swatch').forEach(el => {
+        el.classList.remove('is-active');
+        el.querySelector('.chip').innerHTML = '';
+      });
+      btn.classList.add('is-active');
+      btn.querySelector('.chip').innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      renderPreview();
+    });
+    fabricGrid.appendChild(btn);
+  });
+
+  const swatchShowcase = document.getElementById('swatchShowcase');
+  fabrics.forEach(f => {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.style.background = f.hex;
+    tile.textContent = f.name;
+    swatchShowcase.appendChild(tile);
+  });
+
+  // ---------- product type (configurator tabs) ----------
+  const cfgTabEscalera = document.getElementById('cfgTabEscalera');
+  const cfgTabRampa = document.getElementById('cfgTabRampa');
+  const tipoEscalera = document.getElementById('tipoEscalera');
+  const tipoRampa = document.getElementById('tipoRampa');
+
+  function setConfigTab(val){
+    state.tipo = val;
+    cfgTabEscalera.classList.toggle('is-active', val === 'escalera');
+    cfgTabRampa.classList.toggle('is-active', val === 'rampa');
+    cfgTabEscalera.setAttribute('aria-selected', val === 'escalera');
+    cfgTabRampa.setAttribute('aria-selected', val === 'rampa');
+    tipoEscalera.checked = val === 'escalera';
+    tipoRampa.checked = val === 'rampa';
+    updateRecommendation();
+    renderPreview();
+  }
+  cfgTabEscalera.addEventListener('click', () => setConfigTab('escalera'));
+  cfgTabRampa.addEventListener('click', () => setConfigTab('rampa'));
+
+  // ---------- circular product cards + detail modal ----------
+  const productData = {
+    escalera: {
+      title: 'Escalera Enmadera',
+      img: 'escalera-infografia.jpg',
+      objectPosition: 'center',
+      fit: 'contain',
+      tag: 'Ideal para espacios reducidos',
+      desc: 'De 3 a 6 escalones según la altura de tu cama o sofá. Estructura de madera con forro de tela removible.',
+      price: 'desde $245.000 / unidad · envío incluido'
+    },
+    rampa: {
+      title: 'Rampa Enmadera',
+      img: 'rampa-infografia.jpg',
+      objectPosition: 'center',
+      fit: 'contain',
+      tag: 'Ideal para razas pequeñas y adultos mayores',
+      desc: 'Superficie inclinada continua, sin saltos entre escalones. Ideal para perros con displasia o muy pequeños.',
+      price: 'desde $220.000 / unidad · envío incluido'
+    }
+  };
+
+  const productModalOverlay = document.getElementById('productModalOverlay');
+  const productModalBox = document.getElementById('productModalBox');
+  const productSummaryView = document.getElementById('productSummaryView');
+  const productDetailView = document.getElementById('productDetailView');
+
+  function showProductSummary(){
+    productSummaryView.style.display = '';
+    productDetailView.style.display = 'none';
+    productModalBox.classList.remove('is-detail');
+  }
+  function showProductDetail(tipo){
+    productSummaryView.style.display = 'none';
+    productDetailView.style.display = 'block';
+    productModalBox.classList.add('is-detail');
+    setConfigTab(tipo);
+    document.getElementById('detailConfigTitle').textContent =
+      tipo === 'escalera' ? 'Diseña tu escalera' : 'Diseña tu rampa';
+    productModalBox.scrollTop = 0;
+    const scrollArea = document.querySelector('.product-modal-detail');
+    if (scrollArea) scrollArea.scrollTop = 0;
+  }
+
+  function goToStandard(tipo){
+    setConfigTab(tipo);
+
+    const weightInput = document.getElementById('weight');
+    const heightInput = document.getElementById('petHeight');
+    if (!weightInput.value) weightInput.value = 10;
+    if (!heightInput.value) heightInput.value = 50;
+
+    document.querySelector('input[name="medida"][value="estandar"]').checked = true;
+    state.medida = 'estandar';
+    document.getElementById('cardEstandar').classList.add('is-active');
+    document.getElementById('cardPersonalizada').classList.remove('is-active');
+    document.getElementById('customDims').classList.remove('is-visible');
+
+    updateRecommendation();
+    renderPreview();
+    closeProductModal();
+    document.getElementById('resumen-diseno').scrollIntoView({behavior:'smooth'});
+  }
+
+  function openProductModal(tipo){
+    const d = productData[tipo];
+    document.getElementById('productModalTitle').textContent = d.title;
+    const img = document.getElementById('productModalImg');
+    const imgWrap = document.getElementById('productModalImgWrap');
+    img.src = d.img;
+    img.alt = d.title;
+    img.style.objectPosition = d.objectPosition;
+    img.style.objectFit = d.fit || 'cover';
+    if (d.fit === 'contain'){
+      imgWrap.style.height = '380px';
+      imgWrap.style.background = 'var(--paper-deep)';
+    } else {
+      imgWrap.style.height = '220px';
+      imgWrap.style.background = 'transparent';
+    }
+    document.getElementById('productModalTag').textContent = d.tag;
+    document.getElementById('productModalDesc').textContent = d.desc;
+    document.getElementById('productModalPrice').textContent = d.price;
+    document.getElementById('productModalCta').onclick = () => showProductDetail(tipo);
+    document.getElementById('productModalStandardBtn').onclick = () => goToStandard(tipo);
+    showProductSummary();
+    productModalOverlay.classList.add('is-open');
+  }
+  function closeProductModal(){
+    productModalOverlay.classList.remove('is-open');
+  }
+  document.getElementById('backToSummary').addEventListener('click', showProductSummary);
+  document.querySelectorAll('[data-product-circle]').forEach(btn => {
+    btn.addEventListener('click', () => openProductModal(btn.getAttribute('data-product-circle')));
+  });
+  document.getElementById('closeProductModal').addEventListener('click', closeProductModal);
+  productModalOverlay.addEventListener('click', (e) => {
+    if (e.target === productModalOverlay) closeProductModal();
+  });
+  document.getElementById('goToPreviewBtn').addEventListener('click', () => {
+    closeProductModal();
+    document.getElementById('resumen-diseno').scrollIntoView({behavior:'smooth'});
+  });
+
+  // ---------- breed ----------
+  const breedSelect = document.getElementById('breed');
+  const breedOther = document.getElementById('breedOther');
+  breedSelect.addEventListener('change', () => {
+    if (breedSelect.value === 'otra') {
+      breedOther.style.display = 'block';
+      state.breed = breedOther.value.trim();
+    } else {
+      breedOther.style.display = 'none';
+      state.breed = breedSelect.value;
+    }
+    renderPreview();
+  });
+  breedOther.addEventListener('input', () => {
+    state.breed = breedOther.value.trim();
+    renderPreview();
+  });
+
+  // ---------- weight / height ----------
+  const weightInput = document.getElementById('weight');
+  const heightInput = document.getElementById('petHeight');
+  const sizeRecommendation = document.getElementById('sizeRecommendation');
+
+  function updateRecommendation(){
+    const w = parseFloat(weightInput.value);
+    const h = parseFloat(heightInput.value);
+    state.weight = isNaN(w) ? null : w;
+    state.petHeight = isNaN(h) ? null : h;
+
+    if (!state.weight && !state.petHeight){
+      sizeRecommendation.textContent = 'Ingresa el peso y la altura para ver la recomendación de tamaño.';
+      renderPreview();
+      return;
+    }
+    let msg = '';
+    if (state.petHeight){
+      const steps = stepsFromHeight(state.petHeight);
+      msg += state.tipo === 'escalera'
+        ? `Con ${state.petHeight} cm de altura, recomendamos una escalera de ${steps} escalones. `
+        : `Con ${state.petHeight} cm de altura, la rampa tendrá aproximadamente ${Math.round(state.petHeight * 2.6)} cm de largo. `;
+    }
+    if (state.weight){
+      if (state.weight > 25){
+        msg += 'Por el peso, la estructura se refuerza con travesaños adicionales sin costo extra.';
+      } else if (state.weight < 5){
+        msg += 'Por el peso, los peldaños se hacen un poco más angostos para mayor estabilidad.';
+      } else {
+        msg += 'Este peso corresponde a la estructura estándar.';
+      }
+    }
+    sizeRecommendation.textContent = msg;
+    renderPreview();
+  }
+  weightInput.addEventListener('input', updateRecommendation);
+  heightInput.addEventListener('input', updateRecommendation);
+
+  function stepsFromHeight(h){
+    return Math.min(7, Math.max(3, Math.round(h / 16)));
+  }
+
+  // ---------- medidas ----------
+  const customDims = document.getElementById('customDims');
+  document.querySelectorAll('input[name="medida"]').forEach(input => {
+    input.addEventListener('change', () => {
+      state.medida = input.value;
+      document.getElementById('cardEstandar').classList.toggle('is-active', state.medida === 'estandar');
+      document.getElementById('cardPersonalizada').classList.toggle('is-active', state.medida === 'personalizada');
+      customDims.classList.toggle('is-visible', state.medida === 'personalizada');
+      renderPreview();
+    });
+  });
+
+  ['dimLargo','dimAncho','dimAlto'].forEach(id => {
+    document.getElementById(id).addEventListener('input', (e) => {
+      const key = id.replace('dim','').toLowerCase();
+      state.dims[key] = parseFloat(e.target.value) || null;
+      renderPreview();
+    });
+  });
+
+  // ---------- quantity ----------
+  const qtyValue = document.getElementById('qtyValue');
+  document.getElementById('qtyMinus').addEventListener('click', () => {
+    state.qty = Math.max(1, state.qty - 1);
+    qtyValue.textContent = state.qty;
+    renderPreview();
+  });
+  document.getElementById('qtyPlus').addEventListener('click', () => {
+    state.qty = Math.min(10, state.qty + 1);
+    qtyValue.textContent = state.qty;
+    renderPreview();
+  });
+
+  // ---------- pricing ----------
+  function computeUnitPrice(){
+    let base = state.tipo === 'escalera' ? 245000 : 220000;
+    if (state.petHeight){
+      const steps = stepsFromHeight(state.petHeight);
+      const extraSteps = Math.max(0, steps - 4);
+      base += extraSteps * 15000;
+    }
+    if (state.medida === 'personalizada'){
+      base += 50000;
+    }
+    return base;
+  }
+
+  function formatCOP(n){
+    return '$' + Math.round(n).toLocaleString('es-CO');
+  }
+
+  // ---------- live preview ----------
+  function fabricColor(){ return fabrics[state.fabricIndex].hex; }
+
+  function renderPreview(){
+    const canvas = document.getElementById('previewCanvas');
+    if (state.tipo === 'escalera'){
+      canvas.innerHTML = '<img src="escalera-foto.jpg" alt="Escalera Enmadera">';
+    } else {
+      canvas.innerHTML = '<img src="rampa-foto.jpg" alt="Rampa Enmadera" style="object-position:top;">';
+    }
+
+    document.getElementById('sumProducto').textContent = state.tipo === 'escalera' ? 'Escalera' : 'Rampa';
+    const breedLabel = state.breed ? state.breed : 'sin especificar';
+    const weightLabel = state.weight ? `${state.weight} kg` : 'sin peso';
+    document.getElementById('sumPerro').textContent = `${breedLabel}, ${weightLabel}`;
+
+    if (state.medida === 'personalizada'){
+      const d = state.dims;
+      document.getElementById('sumMedidas').textContent =
+        (d.largo && d.ancho && d.alto) ? `${d.largo}×${d.ancho}×${d.alto} cm` : 'Personalizada (pendiente)';
+    } else {
+      const steps = state.petHeight ? stepsFromHeight(state.petHeight) : null;
+      document.getElementById('sumMedidas').textContent = steps
+        ? (state.tipo === 'escalera' ? `Estándar, ${steps} escalones` : 'Estándar recomendada')
+        : 'Estándar';
+    }
+
+    document.getElementById('sumTela').textContent = fabrics[state.fabricIndex].name;
+    document.getElementById('sumCantidad').textContent = state.qty;
+
+    const unit = computeUnitPrice();
+    document.getElementById('previewPrice').textContent = formatCOP(unit * state.qty);
+  }
+
+  renderPreview();
+
+  // ---------- add to cart ----------
+  const formMsg = document.getElementById('formMsg');
+  document.getElementById('addToCartBtn').addEventListener('click', () => {
+    if (!state.weight || !state.petHeight){
+      formMsg.textContent = 'Ingresa el peso y la altura de la cama o sofá antes de continuar.';
+      return;
+    }
+    if (state.medida === 'personalizada' && (!state.dims.largo || !state.dims.ancho || !state.dims.alto)){
+      formMsg.textContent = 'Completa largo, ancho y alto para la medida personalizada.';
+      return;
+    }
+    formMsg.textContent = '';
+
+    const unit = computeUnitPrice();
+    const item = {
+      id: cartIdCounter++,
+      tipo: state.tipo,
+      breed: state.breed || 'Sin especificar',
+      weight: state.weight,
+      petHeight: state.petHeight,
+      medida: state.medida,
+      dims: {...state.dims},
+      fabricName: fabrics[state.fabricIndex].name,
+      fabricHex: fabrics[state.fabricIndex].hex,
+      qty: state.qty,
+      unitPrice: unit
+    };
+    cart.push(item);
+    renderCart();
+    openCart();
+  });
+
+  // ---------- cart rendering ----------
+  const cartItemsEl = document.getElementById('cartItems');
+  const cartBadge = document.getElementById('cartBadge');
+  const cartSubtotal = document.getElementById('cartSubtotal');
+
+  function renderCart(){
+    const totalQty = cart.reduce((sum, it) => sum + it.qty, 0);
+    cartBadge.textContent = totalQty;
+
+    if (cart.length === 0){
+      cartItemsEl.innerHTML = '<p class="cart-empty">Tu carrito está vacío. Diseña un producto para empezar.</p>';
+      cartSubtotal.textContent = '$0';
+      return;
+    }
+
+    cartItemsEl.innerHTML = cart.map(it => {
+      const tipoLabel = it.tipo === 'escalera' ? 'Escalera' : 'Rampa';
+      const medidaLabel = it.medida === 'personalizada'
+        ? `${it.dims.largo}×${it.dims.ancho}×${it.dims.alto} cm`
+        : 'Medida estándar';
+      return `
+        <div class="cart-item" data-id="${it.id}">
+          <div class="swatch" style="background:${it.fabricHex}"></div>
+          <div class="info">
+            <h5>${tipoLabel}</h5>
+            <p>${it.breed}, ${it.weight} kg · ${medidaLabel} · tela ${it.fabricName}</p>
+            <div class="item-actions">
+              <button class="remove-btn" data-remove="${it.id}">Eliminar</button>
+              <span class="item-price">${formatCOP(it.unitPrice * it.qty)} · x${it.qty}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const subtotal = cart.reduce((sum, it) => sum + it.unitPrice * it.qty, 0);
+    cartSubtotal.textContent = formatCOP(subtotal);
+
+    cartItemsEl.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = parseInt(btn.getAttribute('data-remove'));
+        cart = cart.filter(it => it.id !== id);
+        renderCart();
+      });
+    });
+  }
+
+  // ---------- drawer open/close ----------
+  const cartDrawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('overlay');
+  function openCart(){
+    cartDrawer.classList.add('is-open');
+    overlay.classList.add('is-open');
+  }
+  function closeCartFn(){
+    cartDrawer.classList.remove('is-open');
+    overlay.classList.remove('is-open');
+  }
+  document.getElementById('openCart').addEventListener('click', openCart);
+  document.getElementById('closeCart').addEventListener('click', closeCartFn);
+  overlay.addEventListener('click', closeCartFn);
+
+  document.getElementById('checkoutBtn').addEventListener('click', () => {
+    if (cart.length === 0){
+      alert('Tu carrito está vacío todavía.');
+      return;
+    }
+    closeCartFn();
+    openBillingModal();
+  });
+
+  // ---------- billing & shipping modal ----------
+  const billingModalOverlay = document.getElementById('billingModalOverlay');
+  const billingForm = document.getElementById('billingForm');
+  const billingFormMsg = document.getElementById('billingFormMsg');
+  const dogPhotoInput = document.getElementById('billingDogPhoto');
+  const dogPhotoPreview = document.getElementById('dogPhotoPreview');
+  let dogPhotoDataUrl = '';
+
+  function openBillingModal(){
+    billingModalOverlay.classList.add('is-open');
+  }
+  function closeBillingModal(){
+    billingModalOverlay.classList.remove('is-open');
+  }
+  document.getElementById('closeBillingModal').addEventListener('click', closeBillingModal);
+  billingModalOverlay.addEventListener('click', (e) => {
+    if (e.target === billingModalOverlay) closeBillingModal();
+  });
+
+  dogPhotoInput.addEventListener('change', () => {
+    const file = dogPhotoInput.files[0];
+    if (!file) { dogPhotoPreview.innerHTML = ''; dogPhotoDataUrl = ''; return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      dogPhotoDataUrl = e.target.result;
+      dogPhotoPreview.innerHTML = `<img src="${dogPhotoDataUrl}" alt="Foto de tu perro">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  billingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dogName = document.getElementById('billingDogName').value.trim();
+    const fullName = document.getElementById('billingName').value.trim();
+    const email = document.getElementById('billingEmail').value.trim();
+    const phone = document.getElementById('billingPhone').value.trim();
+    const address = document.getElementById('billingAddress').value.trim();
+
+    if (!dogName || !fullName || !email || !phone || !address){
+      billingFormMsg.textContent = 'Completa todos los campos obligatorios antes de continuar.';
+      return;
+    }
+    billingFormMsg.textContent = '';
+
+    const orderLines = cart.map(it => {
+      const tipoLabel = it.tipo === 'escalera' ? 'Escalera' : 'Rampa';
+      const medidaLabel = it.medida === 'personalizada'
+        ? `${it.dims.largo}×${it.dims.ancho}×${it.dims.alto} cm`
+        : 'Medida estándar';
+      return `- ${tipoLabel} x${it.qty}, ${it.breed}, ${it.weight} kg, ${medidaLabel}, tela ${it.fabricName}: ${formatCOP(it.unitPrice * it.qty)}`;
+    }).join('\n');
+    const subtotal = cart.reduce((sum, it) => sum + it.unitPrice * it.qty, 0);
+
+    const message = `Nuevo pedido Enmadera\n\nPerro: ${dogName}\n\nProductos:\n${orderLines}\n\nSubtotal (envío incluido): ${formatCOP(subtotal)}\n\nCliente: ${fullName}\nCorreo: ${email}\nTeléfono: ${phone}\nDirección de envío: ${address}`;
+
+    window.open(`https://wa.me/573204506790?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+
+    const emailSubject = `Nuevo pedido Enmadera - ${fullName}`;
+    window.open(`mailto:enmaderataller@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(message)}`, '_blank', 'noopener');
+
+    window.open(PSE_PAYMENT_URL, '_blank', 'noopener');
+
+    alert('Le enviamos los datos de tu pedido a Enmadera por WhatsApp y correo. Ahora te llevamos a la página de pago con PSE.');
+
+    cart = [];
+    renderCart();
+    billingForm.reset();
+    dogPhotoPreview.innerHTML = '';
+    dogPhotoDataUrl = '';
+    closeBillingModal();
+  });
+
+  // ---------- 3D design viewer ----------
+  let scene3, camera3, renderer3, controls3, modelGroup3, rafId3 = null, animating3 = false, threeReady = false;
+
+  function ensureThree(){
+    if (threeReady) return;
+    const container = document.getElementById('designCanvas3D');
+    scene3 = new THREE.Scene();
+    camera3 = new THREE.PerspectiveCamera(45, container.clientWidth / (container.clientHeight || 1), 0.1, 100);
+    renderer3 = new THREE.WebGLRenderer({antialias:true, alpha:true});
+    renderer3.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer3.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer3.domElement);
+
+    scene3.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.75);
+    dirLight.position.set(3, 5, 2);
+    scene3.add(dirLight);
+    const fillLight = new THREE.DirectionalLight(0xfff1dd, 0.25);
+    fillLight.position.set(-2, 2, 3);
+    scene3.add(fillLight);
+
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 20),
+      new THREE.MeshStandardMaterial({color:0xC9A97C, roughness:0.9})
+    );
+    floor.rotation.x = -Math.PI / 2;
+    scene3.add(floor);
+
+    // simple room backdrop so the piece is shown in context, next to the bed
+    const backWall = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 6),
+      new THREE.MeshStandardMaterial({color:0xEDE6D8})
+    );
+    backWall.position.set(0, 3, -9);
+    scene3.add(backWall);
+
+    const sideWall = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 6),
+      new THREE.MeshStandardMaterial({color:0xE7DFCE})
+    );
+    sideWall.position.set(-9, 3, 0);
+    sideWall.rotation.y = Math.PI / 2;
+    scene3.add(sideWall);
+
+    // baseboard trim where the walls meet the floor
+    const baseboardMat = new THREE.MeshStandardMaterial({color:0xFFFDF8, roughness:0.6});
+    const baseboardBack = new THREE.Mesh(new THREE.BoxGeometry(20, 0.09, 0.03), baseboardMat);
+    baseboardBack.position.set(0, 0.045, -8.98);
+    scene3.add(baseboardBack);
+    const baseboardSide = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.09, 20), baseboardMat);
+    baseboardSide.position.set(-8.98, 0.045, 0);
+    scene3.add(baseboardSide);
+
+    // window on the back wall for a bit of natural light
+    const windowGroup = new THREE.Group();
+    const pane = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.1, 0.9),
+      new THREE.MeshStandardMaterial({color:0xCFE3E6, roughness:0.3, metalness:0.1})
+    );
+    windowGroup.add(pane);
+    const frameMat = new THREE.MeshStandardMaterial({color:0xFFFDF8, roughness:0.6});
+    const frameH = new THREE.Mesh(new THREE.BoxGeometry(1.16, 0.05, 0.04), frameMat);
+    windowGroup.add(frameH);
+    const muntinV = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.9, 0.03), frameMat);
+    windowGroup.add(muntinV);
+    const muntinH = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.03, 0.03), frameMat);
+    windowGroup.add(muntinH);
+    const frameVL = frameH.clone();
+    frameVL.geometry = new THREE.BoxGeometry(0.05, 0.98, 0.04);
+    frameVL.position.x = -0.58;
+    windowGroup.add(frameVL);
+    const frameVR = frameVL.clone();
+    frameVR.position.x = 0.58;
+    windowGroup.add(frameVR);
+    windowGroup.position.set(3, 2.8, -8.95);
+    scene3.add(windowGroup);
+
+    // potted plant in the corner, echoing the site's own brand style
+    const plantGroup = new THREE.Group();
+    const potMat = new THREE.MeshStandardMaterial({color:0xB9673E, roughness:0.8});
+    const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.12, 0.22, 16), potMat);
+    pot.position.y = 0.11;
+    plantGroup.add(pot);
+    const leafMat = new THREE.MeshStandardMaterial({color:0x4A6741, roughness:0.85});
+    for (let i = 0; i < 5; i++){
+      const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.45, 8), leafMat);
+      const a = (i / 5) * Math.PI * 2;
+      leaf.position.set(Math.cos(a) * 0.06, 0.22 + 0.22, Math.sin(a) * 0.06);
+      leaf.rotation.z = Math.cos(a) * 0.35;
+      leaf.rotation.x = -Math.sin(a) * 0.35;
+      plantGroup.add(leaf);
+    }
+    plantGroup.position.set(-7, 0, -7);
+    scene3.add(plantGroup);
+
+    // soft rug under the product
+    const rug = new THREE.Mesh(
+      new THREE.CircleGeometry(0.9, 32),
+      new THREE.MeshStandardMaterial({color:0xEFE4CE, roughness:1})
+    );
+    rug.rotation.x = -Math.PI / 2;
+    rug.position.set(0, 0.002, 0.5);
+    scene3.add(rug);
+
+    modelGroup3 = new THREE.Group();
+    scene3.add(modelGroup3);
+
+    camera3.position.set(3.6, 2.6, 4.2);
+    controls3 = new THREE.OrbitControls(camera3, renderer3.domElement);
+    controls3.target.set(0, 0.8, -2.2);
+    controls3.enableDamping = true;
+    controls3.dampingFactor = 0.08;
+    controls3.minDistance = 1.4;
+    controls3.maxDistance = 16;
+    controls3.update();
+
+    window.addEventListener('resize', onThreeResize);
+    threeReady = true;
+  }
+
+  function onThreeResize(){
+    if (!threeReady) return;
+    const container = document.getElementById('designCanvas3D');
+    if (!container.clientWidth) return;
+    camera3.aspect = container.clientWidth / container.clientHeight;
+    camera3.updateProjectionMatrix();
+    renderer3.setSize(container.clientWidth, container.clientHeight);
+  }
+
+  function clearModel3(){
+    while (modelGroup3.children.length){
+      const obj = modelGroup3.children.pop();
+      obj.traverse(node => {
+        if (node.geometry) node.geometry.dispose();
+        if (node.material) node.material.dispose();
+      });
+    }
+  }
+
+  function addBedroom(topHeightY, topZ, productWidth){
+    const bedWidth = productWidth * 3.2;
+    const bedDepth = productWidth * 2.6;
+    const mattressHeight = topHeightY * 0.28;
+    const frameHeight = Math.max(topHeightY - mattressHeight, topHeightY * 0.05);
+    const bedNearZ = topZ - 0.05;
+    const bedCenterZ = bedNearZ - bedDepth / 2;
+    const s = bedWidth / 1.7; // scales the decor below relative to the bed size
+
+    const frameMat = new THREE.MeshStandardMaterial({color:0xC9A06B, roughness:0.8});
+    const mattressMat = new THREE.MeshStandardMaterial({color:0xF5F1E6, roughness:0.9});
+    const pillowMat = new THREE.MeshStandardMaterial({color:0xFFFFFF, roughness:0.9});
+    const blanketMat = new THREE.MeshStandardMaterial({color:0xC98A2D, roughness:0.85});
+
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(bedWidth, frameHeight, bedDepth), frameMat);
+    frame.position.set(0, frameHeight / 2, bedCenterZ);
+    modelGroup3.add(frame);
+
+    const mattress = new THREE.Mesh(new THREE.BoxGeometry(bedWidth * 0.96, mattressHeight, bedDepth * 0.94), mattressMat);
+    mattress.position.set(0, frameHeight + mattressHeight / 2, bedCenterZ);
+    modelGroup3.add(mattress);
+
+    const pillow = new THREE.Mesh(new THREE.BoxGeometry(bedWidth * 0.4, 0.12 * s, 0.34 * s), pillowMat);
+    pillow.position.set(0, frameHeight + mattressHeight + 0.06 * s, bedCenterZ - bedDepth / 2 + 0.25 * s);
+    modelGroup3.add(pillow);
+
+    const blanket = new THREE.Mesh(new THREE.BoxGeometry(bedWidth * 0.94, 0.04 * s, bedDepth * 0.5), blanketMat);
+    blanket.position.set(0, frameHeight + mattressHeight + 0.02 * s, bedCenterZ + bedDepth * 0.15);
+    modelGroup3.add(blanket);
+
+    // nightstand with a warm lamp beside the bed
+    const standX = bedWidth / 2 + 0.22 * s;
+    const standMat = new THREE.MeshStandardMaterial({color:0xC9A06B, roughness:0.8});
+    const standTop = frameHeight + 0.12 * s;
+    const nightstand = new THREE.Mesh(new THREE.BoxGeometry(0.36 * s, standTop, 0.36 * s), standMat);
+    nightstand.position.set(standX, standTop / 2, bedCenterZ - bedDepth / 2 + 0.25 * s);
+    modelGroup3.add(nightstand);
+
+    const lampBaseMat = new THREE.MeshStandardMaterial({color:0x3A3A3A, roughness:0.5, metalness:0.3});
+    const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.03 * s, 0.05 * s, 0.16 * s, 12), lampBaseMat);
+    lampBase.position.set(standX, standTop + 0.08 * s, bedCenterZ - bedDepth / 2 + 0.25 * s);
+    modelGroup3.add(lampBase);
+
+    const lampShadeMat = new THREE.MeshStandardMaterial({color:0xF3E3B8, roughness:0.7, emissive:0xF3D48A, emissiveIntensity:0.35});
+    const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.11 * s, 0.14 * s, 16, 1, true), lampShadeMat);
+    lampShade.position.set(standX, standTop + 0.2 * s, bedCenterZ - bedDepth / 2 + 0.25 * s);
+    modelGroup3.add(lampShade);
+
+    const lampLight = new THREE.PointLight(0xFFDFA0, 0.6, 2.2);
+    lampLight.position.set(standX, standTop + 0.22 * s, bedCenterZ - bedDepth / 2 + 0.25 * s);
+    modelGroup3.add(lampLight);
+  }
+
+  function buildStairsModel3(hex){
+    const steps = state.petHeight ? stepsFromHeight(state.petHeight) : 3;
+    const stepHeight = 0.22, stepDepth = 0.46, width = 1.3;
+    const totalDepth = steps * stepDepth;
+    const woodMat = new THREE.MeshStandardMaterial({color:0xD9B577, roughness:0.85});
+    const fabricMat = new THREE.MeshStandardMaterial({color: hex, roughness:0.95});
+    const seamMat = new THREE.MeshStandardMaterial({color:0x2A2622, roughness:0.6});
+    const rivetMat = new THREE.MeshStandardMaterial({color:0x2A2622, roughness:0.4, metalness:0.3});
+
+    for (let i = 0; i < steps; i++){
+      // anchored at the back (near the bed) so the tallest riser sits by the bed
+      // and the shortest one sits at the front, right where the dog steps up
+      const boxDepth = (steps - i) * stepDepth;
+      const boxHeight = (i + 1) * stepHeight;
+      const boxCenterZ = -totalDepth + boxDepth / 2;
+      const box = new THREE.Mesh(new THREE.BoxGeometry(width, boxHeight, boxDepth), woodMat);
+      box.position.set(0, boxHeight / 2, boxCenterZ);
+      modelGroup3.add(box);
+
+      // fabric tread, one uniformly spaced strip per step starting at the front
+      const padDepth = stepDepth * 0.92;
+      const padCenterZ = -(i + 0.5) * stepDepth;
+      const pad = new THREE.Mesh(new THREE.BoxGeometry(width * 0.94, 0.045, padDepth), fabricMat);
+      pad.position.set(0, boxHeight + 0.025, padCenterZ);
+      modelGroup3.add(pad);
+
+      // thin dark seam along the front edge of the tread, marking where this
+      // step's panel ends and the one below begins
+      const seamZ = -(i) * stepDepth - 0.01;
+      const seam = new THREE.Mesh(new THREE.BoxGeometry(width * 0.96, 0.012, 0.02), seamMat);
+      seam.position.set(0, boxHeight + 0.05, seamZ);
+      modelGroup3.add(seam);
+
+      // small corner rivets on the tread, like the hardware visible on the real piece
+      const rivetOffsetX = width / 2 - 0.09;
+      const rivetFrontZ = padCenterZ + padDepth / 2 - 0.04;
+      const rivetBackZ = padCenterZ - padDepth / 2 + 0.04;
+      [rivetOffsetX, -rivetOffsetX].forEach(rx => {
+        [rivetFrontZ, rivetBackZ].forEach(rz => {
+          const rivet = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.01, 8), rivetMat);
+          rivet.position.set(rx, boxHeight + 0.048, rz);
+          modelGroup3.add(rivet);
+        });
+      });
+    }
+
+    const topHeightY = steps * stepHeight;
+    const topZ = -totalDepth;
+    addBedroom(topHeightY, topZ, width);
+  }
+
+  function makeStrut(p1, p2, thickness, material){
+    const dir = new THREE.Vector3().subVectors(p2, p1);
+    const len = dir.length();
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(thickness, thickness, len), material);
+    mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), dir.clone().normalize());
+    return mesh;
+  }
+
+  function buildRampModel3(hex){
+    const heightM = state.petHeight ? Math.min(1.0, Math.max(0.3, state.petHeight / 100)) : 0.55;
+    const angle = THREE.MathUtils.degToRad(24);
+    const length = heightM / Math.sin(angle);
+    const width = 1.0;
+    const thickness = 0.045;
+    const railW = 0.06, railH = 0.075;
+
+    const fabricMat = new THREE.MeshStandardMaterial({color: hex, roughness:0.95});
+    const woodMat = new THREE.MeshStandardMaterial({color:0xD9B577, roughness:0.85});
+    const strapMat = new THREE.MeshStandardMaterial({color:0x3A3A3A, roughness:0.8});
+    const metalMat = new THREE.MeshStandardMaterial({color:0xB9BCC2, roughness:0.4, metalness:0.6});
+
+    const assembly = new THREE.Group();
+
+    // fabric surface split into 4 padded segments separated by thin straps, like the real product
+    const segments = 4;
+    const strapThickness = 0.02;
+    const totalStrapSpace = (segments - 1) * strapThickness;
+    const panelLength = (length - totalStrapSpace) / segments;
+    let zCursor = 0;
+    for (let s = 0; s < segments; s++){
+      const panelCenterZ = -(zCursor + panelLength / 2);
+      const panel = new THREE.Mesh(
+        new THREE.BoxGeometry(width - 2 * railW, thickness, panelLength),
+        fabricMat
+      );
+      panel.position.set(0, thickness / 2, panelCenterZ);
+      assembly.add(panel);
+      zCursor += panelLength;
+      if (s < segments - 1){
+        const strapCenterZ = -(zCursor + strapThickness / 2);
+        const strap = new THREE.Mesh(
+          new THREE.BoxGeometry(width - 2 * railW, thickness + 0.012, strapThickness),
+          strapMat
+        );
+        strap.position.set(0, (thickness + 0.012) / 2, strapCenterZ);
+        assembly.add(strap);
+        zCursor += strapThickness;
+      }
+    }
+
+    // wood side rails running the full length, like the frame in the photo
+    const rail1 = new THREE.Mesh(new THREE.BoxGeometry(railW, railH, length), woodMat);
+    rail1.position.set(width / 2 - railW / 2, railH / 2, -length / 2);
+    assembly.add(rail1);
+    const rail2 = rail1.clone();
+    rail2.position.x = -(width / 2 - railW / 2);
+    assembly.add(rail2);
+
+    // top support crossbar, where the ramp meets the bed or sofa,
+    // built up like a real handle/reinforcement bar rather than a thin cap
+    const topBar = new THREE.Mesh(new THREE.BoxGeometry(width + 0.05, railH * 1.4, 0.09), woodMat);
+    topBar.position.set(0, railH * 0.6, -length + 0.045);
+    assembly.add(topBar);
+    const topCapL = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.05, 12), woodMat);
+    topCapL.rotation.z = Math.PI / 2;
+    topCapL.position.set(width / 2 + 0.02, railH * 0.6, -length + 0.045);
+    assembly.add(topCapL);
+    const topCapR = topCapL.clone();
+    topCapR.position.x = -(width / 2 + 0.02);
+    assembly.add(topCapR);
+
+    assembly.rotation.x = angle;
+    modelGroup3.add(assembly);
+
+    // folding leg frame: hinges partway up the ramp and splays outward to the floor,
+    // matching the wider A-frame base seen in the real product
+    const hingeFraction = 0.42;
+    const hingeZLocal = -hingeFraction * length;
+    const hingeY = -hingeZLocal * Math.sin(angle);
+    const hingeZ = hingeZLocal * Math.cos(angle);
+
+    const hingeL = new THREE.Vector3(-(width / 2 - railW / 2), hingeY, hingeZ);
+    const hingeR = new THREE.Vector3(width / 2 - railW / 2, hingeY, hingeZ);
+    const footL = new THREE.Vector3(-(width / 2 + 0.16), 0, hingeZ);
+    const footR = new THREE.Vector3(width / 2 + 0.16, 0, hingeZ);
+
+    modelGroup3.add(makeStrut(hingeL, footL, 0.045, woodMat));
+    modelGroup3.add(makeStrut(hingeR, footR, 0.045, woodMat));
+    modelGroup3.add(makeStrut(hingeL, hingeR, 0.04, woodMat));
+    modelGroup3.add(makeStrut(footL, footR, 0.045, woodMat));
+
+    // small leveling feet at the base, like the bolts visible in the photo
+    [footL, footR].forEach(pt => {
+      const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.045, 12), metalMat);
+      foot.position.set(pt.x, 0.022, pt.z);
+      modelGroup3.add(foot);
+    });
+
+    const topZ = -length * Math.cos(angle);
+    addBedroom(heightM, topZ, width);
+  }
+
+  function renderDesignModal(){
+    clearModel3();
+    const hex = fabricColor();
+    if (state.tipo === 'escalera'){
+      buildStairsModel3(hex);
+    } else {
+      buildRampModel3(hex);
+    }
+    onThreeResize();
+    const tipoLabel = state.tipo === 'escalera' ? 'Escalera' : 'Rampa';
+    document.getElementById('designModalSummary').textContent = `${tipoLabel} · tela ${fabrics[state.fabricIndex].name}`;
+  }
+
+  function animate3D(){
+    if (!animating3) return;
+    rafId3 = requestAnimationFrame(animate3D);
+    controls3.update();
+    renderer3.render(scene3, camera3);
+  }
+
+  const designModalOverlay = document.getElementById('designModalOverlay');
+
+  function closeDesignModal(){
+    designModalOverlay.classList.remove('is-open');
+    animating3 = false;
+    if (rafId3) cancelAnimationFrame(rafId3);
+  }
+
+  document.getElementById('viewDesignBtn').addEventListener('click', () => {
+    if (typeof THREE === 'undefined'){
+      alert('No se pudo cargar el visor 3D. Revisa tu conexión a internet e intenta de nuevo.');
+      return;
+    }
+    designModalOverlay.classList.add('is-open');
+    ensureThree();
+    renderDesignModal();
+    animating3 = true;
+    animate3D();
+  });
+  document.getElementById('closeDesignModal').addEventListener('click', closeDesignModal);
+  designModalOverlay.addEventListener('click', (e) => {
+    if (e.target === designModalOverlay) closeDesignModal();
+  });
+
+})();
+</script>
+
+</body>
+</html>
